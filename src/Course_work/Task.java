@@ -64,7 +64,7 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return id + " Название задачи: " + title + ", тип -  " + type + ", время " + dateTime + ", описание: " + description;
+        return "№ " + id + ", название задачи: " + title + ", тип -  " + type + ", время " + dateTime + ", описание: " + description;
     }
     public abstract boolean appearsIn(LocalDateTime localDateTime);
 

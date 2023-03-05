@@ -54,31 +54,35 @@ public class TaskService {
     }
     private static Task createTask (int entryDate, String title, Type type, String description, LocalDateTime localDateTime) throws TaskNotFoundException {
       return switch (entryDate) {
-          case 0:
+          case 0 -> {
                 OneTimeTask oneTimeTask = new OneTimeTask(title, type, description, localDateTime);
                 taskMap.put(oneTimeTask.getId(), oneTimeTask);
-                break;
-          case 1:
-                DailyTask dailyTask = new DailyTask(title, type, description, localDateTime);
-                taskMap.put(dailyTask.getId(), dailyTask);
-                break;
+              yield oneTimeTask;
+          }
+          case 1 -> {
+              DailyTask dailyTask = new DailyTask(title, type, description, localDateTime);
+              taskMap.put(dailyTask.getId(), dailyTask);
+              yield dailyTask;
+          }
 
-          case 2:
-                WeeklyTask weeklyTask = new WeeklyTask(title, type, description, localDateTime);
-                taskMap.put(weeklyTask.getId(), weeklyTask);
-                break;
+          case 2 -> {
+              WeeklyTask weeklyTask = new WeeklyTask(title, type, description, localDateTime);
+              taskMap.put(weeklyTask.getId(), weeklyTask);
+              yield weeklyTask;
+          }
 
-          case 3:
-                MonthlyTask monthlyTask = new MonthlyTask(title, type, description, localDateTime);
-                taskMap.put(monthlyTask.getId(), monthlyTask);
-                break;
+          case 3 -> {
+              MonthlyTask monthlyTask = new MonthlyTask(title, type, description, localDateTime);
+              taskMap.put(monthlyTask.getId(), monthlyTask);
+              yield monthlyTask;
+          }
 
-          case 4:
-                YearlyTask yearlyTask = new YearlyTask(title, type, description, localDateTime);
-                taskMap.put(yearlyTask.getId(), yearlyTask);
-                break;
-
-        default: System.out.println("Введено неверное значение");
+          case 4 -> {
+              YearlyTask yearlyTask = new YearlyTask(title, type, description, localDateTime);
+              taskMap.put(yearlyTask.getId(), yearlyTask);
+              yield yearlyTask;
+          }
+        default -> null;
         };
     }
     public static void removeTask(Scanner scanner) {
