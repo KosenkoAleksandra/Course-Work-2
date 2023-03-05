@@ -13,13 +13,15 @@ public class TaskService {
             scanner.nextLine();
             System.out.println("Введите название задачи: ");
             String title = ValidateUtils.validateString(scanner.nextLine());
-            System.out.println("Введите тип задачи: PERSONAL или WORK");
+            System.out.println("Введите описание задачи: ");
+            String description = ValidateUtils.validateString(scanner.nextLine());
+            System.out.println("Введите тип задачи: 0 - рабочая или 1 - личная");
             Type type = Type.values()[scanner.nextInt()];
             System.out.println("Введите повторяемость задачи: 0 - однократная, 1 - ежедневная, 2 - еженедельная, 3 - ежемесячная, 4 - ежегодная");
             int entryDate = scanner.nextInt();
             System.out.println("Введите дату dd.MM.yyyy HH:mm");
             scanner.nextLine();
-            createEvent(scanner, title, type, "description", entryDate);
+            createEvent(scanner, title, type, description, entryDate);
             System.out.println("Для выхода нажмите Enter\n");
             scanner.nextLine();
         } catch (TaskNotFoundException e) {
@@ -32,7 +34,7 @@ public class TaskService {
             Task task = null;
             try {
                 task = createTask(entryDate, title, type, description, eventDate);
-                System.out.println("Создана задача " + task);
+                System.out.println("Задача создана " + task);
             } catch (TaskNotFoundException e) {
                 System.out.println(e.getMessage());
             }
@@ -52,32 +54,31 @@ public class TaskService {
     }
     private static Task createTask (int entryDate, String title, Type type, String description, LocalDateTime localDateTime) throws TaskNotFoundException {
       return switch (entryDate) {
-            case 0 -> {
+          case 0:
                 OneTimeTask oneTimeTask = new OneTimeTask(title, type, description, localDateTime);
                 taskMap.put(oneTimeTask.getId(), oneTimeTask);
                 break;
-            }
-            case 1 -> {
-                DailyTask task = new DailyTask(title, type, description, localDateTime);
-                taskMap.put(task.getId(), task);
+          case 1:
+                DailyTask dailyTask = new DailyTask(title, type, description, localDateTime);
+                taskMap.put(dailyTask.getId(), dailyTask);
                 break;
-            }
-            case 2 -> {
-                WeeklyTask task = new WeeklyTask(title, type, description, localDateTime);
-                taskMap.put(task.getId(), task);
+
+          case 2:
+                WeeklyTask weeklyTask = new WeeklyTask(title, type, description, localDateTime);
+                taskMap.put(weeklyTask.getId(), weeklyTask);
                 break;
-            }
-            case 3 -> {
-                MonthlyTask task = new MonthlyTask(title, type, description, localDateTime);
-                taskMap.put(task.getId(), task);
+
+          case 3:
+                MonthlyTask monthlyTask = new MonthlyTask(title, type, description, localDateTime);
+                taskMap.put(monthlyTask.getId(), monthlyTask);
                 break;
-            }
-            case 4 -> {
-                YearlyTask task = new YearlyTask(title, type, description, localDateTime);
-                taskMap.put(task.getId(), task);
+
+          case 4:
+                YearlyTask yearlyTask = new YearlyTask(title, type, description, localDateTime);
+                taskMap.put(yearlyTask.getId(), yearlyTask);
                 break;
-            }
-            default -> System.out.println("Введено неверное значение");
+
+        default: System.out.println("Введено неверное значение");
         };
     }
     public static void removeTask(Scanner scanner) {
